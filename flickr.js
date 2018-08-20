@@ -4,6 +4,7 @@ const stringify = require('json-stringify-pretty-compact');
 const fs = require('fs');
 //function to get all the photos
 //exif
+let locationResultsList = [];
 
 let recent = new Promise ((resolve, reject) => {
       request('https://api.flickr.com/services/rest/?method='+'flickr.photos.getRecent'+'&format=json&add nojsoncallback=?&page=10&api+key='+FLICKR_TOKEN, function (error, response, body) {
@@ -16,13 +17,17 @@ let recent = new Promise ((resolve, reject) => {
 });
 
 recent.then((body) => {
-  let page = JSON.parse(JSON.parse(jsonFlickrApi(body)));
-  let listToSniff = idGenerator(page);
-  return(listToSniff)
-}).then((list) => {
-  getPhotosForLocation(list)
-});
-
+    let page = JSON.parse(JSON.parse(jsonFlickrApi(body)));
+    let listToSniff = idGenerator(page);
+    return listToSniff;
+  })
+  .then((list) => {
+    return getPhotosForLocation(list)
+  })
+  .then((photoLocationData) => {
+    console.log(photoLocationData);
+  })
+  .catch('broken');
 
 const jsonFlickrApi = (jsonp) => {
   let b = eval(jsonp);
@@ -45,10 +50,14 @@ let idGenerator = (page) => {
 
 
 let getPhotosForLocation = (photoID) => {
+  let empty = [];
   let z = photoID.map(id => getPhotoLocation(id))
-  Promise.all(z).then(function(results) {
-    console.log(results)
-  })
+  return Promise.all(z)
+    .then(function(result) {
+      let fg = eval(result);
+      empty.push(fg);
+      return (empty);
+  });
 }
 
 let getPhotoLocation = (id) => {
