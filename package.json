@@ -4,7 +4,7 @@
   "description": "how many photos have exif data",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "tape test/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "json-stringify-pretty-compact": "^1.2.0",
-    "parse-jsonp": "^1.0.0",
     "request": "^2.88.0"
   }
 }

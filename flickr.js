@@ -65,3 +65,8 @@ let getPhotoLocation = (id) => {
     });
   });
 }
+
+
+module.exports = {
+  idGenerator
+}
