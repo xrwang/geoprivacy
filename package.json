@@ -1,0 +1,27 @@
+{
+  "name": "geoprivacy",
+  "version": "1.0.0",
+  "description": "how many photos have exif data",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xrwang/geoprivacy.git"
+  },
+  "author": "xrwang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xrwang/geoprivacy/issues"
+  },
+  "homepage": "https://github.com/xrwang/geoprivacy#readme",
+  "devDependencies": {
+    "tape": "^4.9.1"
+  },
+  "dependencies": {
+    "json-stringify-pretty-compact": "^1.2.0",
+    "parse-jsonp": "^1.0.0",
+    "request": "^2.88.0"
+  }
+}
