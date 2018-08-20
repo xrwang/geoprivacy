@@ -21,16 +21,25 @@ let pastWeek = new Promise ((resolve, reject) => {
 });
 
 const jsonFlickrApi = (jsonp) => {
-  let b = JSON.stringify(eval(jsonp));
+  let b = eval(jsonp);
   //response of flickr api is in jsonp
   //need to run eval in order to make jsonp into json
-
-  let photoArrayRegex = /\[(.*?)\]/g;
-  c = photoArrayRegex.exec(b);
-  return (b)
-
+  // let photoArrayRegex = /\[(.*?)\]/g;
+  // c = photoArrayRegex.exec(b);
+  let c = JSON.stringify(b);
+  // console.log(c)
+  return (c)
 }
 
 pastWeek.then((body) => {
-  let d = JSON.parse(jsonFlickrApi(body));
+  let page = JSON.parse(JSON.parse(jsonFlickrApi(body)));
+  idGenerator(page);
+
 });
+
+let idGenerator = (page) => {
+  let photosList = page.photos.photo;
+  let totalPages = page.total;
+  // console.log(typeof(d));
+  console.log(photosList)
+}
