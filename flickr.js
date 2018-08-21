@@ -150,7 +150,7 @@ recent(10).then((body) => {
     return getTagsForEachGeoPhoto(photoArrayWithLocationData)
   })
   .then((photoLocationTags) => {
-    fileWrite(photoLocationTags, 'page10.json')
+    fileWrite(photoLocationTags, 'data/page10.json')
   })
   .catch('broken');
 
