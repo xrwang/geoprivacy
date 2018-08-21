@@ -71,13 +71,23 @@ let filterArrayForExifOnly = (photoLocationData) => {
         let exifArray = element.photo.exif;
         exifArray.forEach((tag) => {
           if (tag.tagspace == "GPS") {
-            locatedPhotos.push(element.photo);
+            // console.log(element.photo.id);
+            // console.log(tag)
+            let photoID = element.photo.id;
+            let emptyArray = [];
+            let photoObj = {
+              [photoID] : emptyArray
+            };
+            emptyArray.push(tag);
+            locatedPhotos.push(photoObj);
           }
         });
     } catch (e){
+
     }
   });
-  return locatedPhotos;
+    console.log(JSON.stringify(locatedPhotos));
+  // return locatedPhotos;
 }
 
 recent.then((body) => {
