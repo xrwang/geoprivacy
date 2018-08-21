@@ -74,9 +74,7 @@ let filterArrayForExifOnly = (photoLocationData) => {
         }
       }
   });
-
-    console.log(JSON.stringify(photos));
-  // return locatedPhotos;
+  return photos;
 }
 
 
@@ -90,11 +88,12 @@ recent.then((body) => {
     return getPhotosForLocation(list)
   })
   .then((photoLocationData) => {
+    filterArrayForExifOnly(photoLocationData)
     // console.log(JSON.stringify(photoLocationData));
   })
   .catch('broken');
 
-module.exports = {
+  module.exports = {
   idGenerator,
   filterArrayForExifOnly
 }
