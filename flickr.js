@@ -16,19 +16,6 @@ let recent = new Promise ((resolve, reject) => {
     });
 });
 
-recent.then((body) => {
-    let page = JSON.parse(JSON.parse(jsonFlickrApi(body)));
-    let listToSniff = idGenerator(page);
-    return listToSniff;
-  })
-  .then((list) => {
-    return getPhotosForLocation(list)
-  })
-  .then((photoLocationData) => {
-    console.log(photoLocationData);
-  })
-  .catch('broken');
-
 const jsonFlickrApi = (jsonp) => {
   let b = eval(jsonp);
   //response of flickr api is in jsonp
@@ -43,7 +30,9 @@ const jsonFlickrApi = (jsonp) => {
 
 let idGenerator = (page) => {
   let photosList = page.photos.photo;
-  let totalPages = page.total;
+  let totalPhotos = page.photos.total;
+  let totalOnOnePage = page.photos.perpage;
+  //Total On One page should be equal to listOfIds.length
   let listOfIds = photosList.map(x => x.id);
   return (listOfIds);
 }
@@ -55,7 +44,10 @@ let getPhotosForLocation = (photoID) => {
   return Promise.all(z)
     .then(function(result) {
       let fg = eval(result);
-      empty.push(fg);
+      fg.forEach((e) => {
+        let cc = JSON.parse(eval(e));
+        empty.push(cc);
+      })
       return (empty);
   });
 }
@@ -63,9 +55,6 @@ let getPhotosForLocation = (photoID) => {
 let getPhotoLocation = (id) => {
   return new Promise ((resolve, reject) => {
     request('https://api.flickr.com/services/rest/?method='+'flickr.photos.getExif'+'&format=json&add nojsoncallback=?&photo_id='+id+'page=10&api+key='+FLICKR_TOKEN, function (error, response, body) {
-      // console.log('error:', error); // Print the error if one occurred
-      // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-      // console.log(body)
       if (error) reject (error);
       if (response.statusCode != 200) {
         reject('Invalid status code <' + response.statusCode + '>');
@@ -75,7 +64,36 @@ let getPhotoLocation = (id) => {
   });
 }
 
+let filterArrayForExifOnly = (photoLocationData) => {
+  let locatedPhotos = [];
+  photoLocationData.forEach((element) => {
+    try {
+        let exifArray = element.photo.exif;
+        exifArray.forEach((tag) => {
+          if (tag.tagspace == "GPS") {
+            locatedPhotos.push(element.photo);
+          }
+        });
+    } catch (e){
+    }
+  });
+  return locatedPhotos;
+}
+
+recent.then((body) => {
+    let page = JSON.parse(JSON.parse(jsonFlickrApi(body)));
+    let listToSniff = idGenerator(page);
+    return listToSniff;
+  })
+  .then((list) => {
+    return getPhotosForLocation(list)
+  })
+  .then((photoLocationData) => {
+    // console.log(JSON.stringify(photoLocationData));
+  })
+  .catch('broken');
 
 module.exports = {
-  idGenerator
+  idGenerator,
+  filterArrayForExifOnly
 }
