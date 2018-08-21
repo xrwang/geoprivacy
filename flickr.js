@@ -65,30 +65,21 @@ let getPhotoLocation = (id) => {
 }
 
 let filterArrayForExifOnly = (photoLocationData) => {
-  let locatedPhotos = [];
-  photoLocationData.forEach((element) => {
-    try {
-        let exifArray = element.photo.exif;
-        exifArray.forEach((tag) => {
-          if (tag.tagspace == "GPS") {
-            // console.log(element.photo.id);
-            // console.log(tag)
-            let photoID = element.photo.id;
-            let emptyArray = [];
-            let photoObj = {
-              [photoID] : emptyArray
-            };
-            emptyArray.push(tag);
-            locatedPhotos.push(photoObj);
-          }
-        });
-    } catch (e){
-
-    }
+  let photos = {};
+  photoLocationData.forEach(({ photo }) => {
+      if (photo && photo.exif) {
+        let photoWithGeoTags = photo.exif.filter((tag) => tag.tagspace === "GPS");
+        if (photoWithGeoTags.length > 0) {
+          photos[photo.id] = photoWithGeoTags;
+        }
+      }
   });
-    console.log(JSON.stringify(locatedPhotos));
+
+    console.log(JSON.stringify(photos));
   // return locatedPhotos;
 }
+
+
 
 recent.then((body) => {
     let page = JSON.parse(JSON.parse(jsonFlickrApi(body)));
