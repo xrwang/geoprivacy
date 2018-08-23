@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/xrwang/geoprivacy#readme",
   "devDependencies": {
+    "simple-autoreload-server": "^0.2.7",
     "tape": "^4.9.1"
   },
   "dependencies": {

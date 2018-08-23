@@ -4,7 +4,7 @@ const stringify = require('json-stringify-pretty-compact');
 const fs = require('fs');
 //function to get all the photos
 //exif
-let locationResultsList = [];
+const locationResultsList = [];
 
 
 const jsonFlickrApi = (jsonp) => {
@@ -20,6 +20,7 @@ const jsonFlickrApi = (jsonp) => {
 
 
 let idGenerator = (page) => {
+  console.log(page)
   let photosList = page.photos.photo;
   let totalPhotos = page.photos.total;
   let totalOnOnePage = page.photos.perpage;
@@ -119,6 +120,7 @@ let recent = (numberOfPhotos) => {
   });
 }
 
+
 let fileWrite = (dataToWrite, filename) => {
   fs.writeFile(filename, JSON.stringify(dataToWrite), 'utf8', function (err) {
   if (err) {
@@ -134,7 +136,7 @@ let getThousandPhotos = (arrayOfPages) => {
 
 
 
-recent(10).then((body) => {
+recent(2).then((body) => {
     let page = JSON.parse(JSON.parse(jsonFlickrApi(body)));
     let listToSniff = idGenerator(page);
     return listToSniff;
@@ -143,6 +145,7 @@ recent(10).then((body) => {
     return getPhotosForLocation(list)
   })
   .then((photoLocationData) => {
+    console.log(Object.keys(photoLocationData).length)
     return filterArrayForExifOnly(photoLocationData)
     // console.log(JSON.stringify(photoLocationData));
   })
@@ -150,7 +153,6 @@ recent(10).then((body) => {
     return getTagsForEachGeoPhoto(photoArrayWithLocationData)
   })
   .then((photoLocationTags) => {
-    fileWrite(photoLocationTags, 'data/page10.json')
   })
   .catch('broken');
 
