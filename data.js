@@ -11,8 +11,11 @@ const j = require('./data/page10.json');
 const fs = require('fs');
 const total = require('./data/allPhotosGeo');
 const allPhotos = Object.assign(a,b,c,d,e,f,g,h,i,j)
+const util = require('./util.js');
+const stringify = require("json-stringify-pretty-compact");
 
-let concatObj = () => {
+
+let concatObj = (photoSet) => {
   fs.writeFile('data/allPhotosGeo.json', JSON.stringify(allPhotos), 'utf8', function (err) {
     if (err) {
         return console.log(err);
@@ -22,4 +25,37 @@ let concatObj = () => {
 }
 
 
-console.log(Object.keys(total).length)
+
+
+console.log('number of photos out of 1000 that have geolocated tags'+ Object.keys(total).length);
+
+
+let findTags = (geoTaggedPhotoList) => {
+  let allTagsArray = [];
+  let tagInfoJSON = {};
+
+  for (let [k,v] of Object.entries(geoTaggedPhotoList)) {
+
+    let contentTagJumble = v.filter((el) => {
+      // console.log(Object.keys(el)[0])
+      // console.log(Object.keys(el)[0] === "contentTag")
+      return Object.keys(el)[0] === "contentTag"
+    });
+    let contentTagJumbleValues = Object.values(contentTagJumble[0])[0];
+    let contentTagNoKey = contentTagJumbleValues.filter((el) => {
+      if (el.raw.length > 0) {
+        allTagsArray.push(el.raw);
+      }
+      return el.raw.length > 0;
+      // console.log(el.raw.length)
+    })
+
+    tagInfoJSON[k] = contentTagNoKey
+    // console.log(JSON.stringify(contentTagNoKey))
+    // console.log(allTagsArray)
+  }
+  tagInfoJSON['allTags'] = allTagsArray;
+  util.fileWrite(tagInfoJSON,'data/tagInfoMostRecentGeo.json')
+}
+
+findTags(total)
