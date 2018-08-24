@@ -6,20 +6,96 @@
     <meta name="author" content="name">
     <meta name="description" content="description here">
     <meta name="keywords" content="keywords,here">
-    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=font1|font2|etc" type="text/css">
-    <link rel="stylesheet" href="stylesheet.css" type="text/css">
-    <script src="https://d3js.org/d3.v5.js"></script>
+    <!-- <link rel="stylesheet" href="stylesheet.css" type="text/css"> -->
+    <style>
+    body {
+        font-family:"Lucida Grande","Droid Sans",Arial,Helvetica,sans-serif;
+    }
+    .legend {
+        border: 1px solid #555555;
+        border-radius: 5px 5px 5px 5px;
+        font-size: 0.8em;
+        margin: 10px;
+        padding: 8px;
+    }
+    .bld {
+        font-weight: bold;
+    }
+</style>
+    <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+
+    <script src="src/wordcloud.js"></script>
+
     <script type="text/javascript">
-     var _gaq = _gaq || [];
-     _gaq.push(['_setAccount', 'UA-XXXXXXXX-Y']);
-     _gaq.push(['_trackPageview']);
-     (function()
-     {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-     })();
+
+    d3.json("./data/tagInfoMostRecentGeo.json", function(data) {
+      var frequency_list = {};
+      var wordsplitList = [];
+      var frequencyArray = [];
+
+      data.allTags.forEach((e) => {
+        var a = e.split(' ');
+        var merged = [].concat.apply([], a);
+        merged.toString().toLowerCase();
+        wordsplitList.push(merged)
+      })
+      var merged2 = [].concat.apply([], wordsplitList);
+      var listofLowercase = [];
+      var merged2lowercase = merged2.forEach(function(a) {
+        listofLowercase.push(a.toLowerCase());
+      });
+
+      var stats =  listofLowercase.reduce(function ( stats, word ) {
+       if ( stats.hasOwnProperty( word ) ) {
+           stats[ word ] = stats[ word ] + 1;
+       } else {
+           stats[ word ] = 1;
+       }
+       return stats
+     }, {});
+
+     // console.log(stats)
+      for(var k in stats ) {
+        var stat = {
+          'text': k,
+          'size': stats[k]
+        }
+        frequencyArray.push(stat)
+      }
+
+      var color = d3.scale.linear()
+              .domain([100,15,10,5,1])
+              .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+
+      d3.layout.cloud().size([1000, 500])
+              .words(frequencyArray)
+              .rotate(0)
+              .fontSize(function(d) { return d.size*20; })
+              .on("end", draw)
+              .start();
+
+      function draw(words) {
+          d3.select("body").append("svg")
+                  .attr("width", 1100)
+                  .attr("height", 550)
+                  .attr("class", "wordcloud")
+                  .append("g")
+                  .attr("transform", "translate(500,300)")
+                  .selectAll("text")
+                  .data(words)
+                  .enter().append("text")
+                  .style("font-size", function(d) { return d.size + "px"; })
+                  .style("fill", function(d, i) { return color(i); })
+                  .attr("transform", function(d) {
+                      return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                  })
+                  .text(function(d) { return d.text; });
+      }
+    });
+
+
+
+
     </script>
   </head>
   <body>
@@ -38,35 +114,16 @@
       </div>
 
       <div class="flickrDataRecent">
-        <svg></svg>
-        HIII
 
-        <script type="text/javascript">
-        var width = 500;  // <-- 1
-        var height = 500;
-        var radius = Math.min(width, height) / 2;  // < -- 2
-        var color = d3.scaleOrdinal(d3.schemeCategory20b);   // <-- 3
-        var g = d3.select('svg')  // <-- 1
-            .attr('width', width)  // <-- 2
-            .attr('height', height)
-            .append('g')  // <-- 3
-            .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
-        </script>
+
       </div>
 
 
       <div class="flickrDataTags">
-        HIII
+        <svg></svg>
+
+
       </div>
 
-      <script type="text/javascript">
-       function autorun()
-       {
-
-       }
-       if (window.addEventListener) window.addEventListener("load", autorun, false);
-       else if (window.attachEvent) window.attachEvent("onload", autorun);
-       else window.onload = autorun;
-      </script>
   </body>
 </html>

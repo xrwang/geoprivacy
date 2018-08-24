@@ -37,8 +37,6 @@ let findTags = (geoTaggedPhotoList) => {
   for (let [k,v] of Object.entries(geoTaggedPhotoList)) {
 
     let contentTagJumble = v.filter((el) => {
-      // console.log(Object.keys(el)[0])
-      // console.log(Object.keys(el)[0] === "contentTag")
       return Object.keys(el)[0] === "contentTag"
     });
     let contentTagJumbleValues = Object.values(contentTagJumble[0])[0];
@@ -47,12 +45,9 @@ let findTags = (geoTaggedPhotoList) => {
         allTagsArray.push(el.raw);
       }
       return el.raw.length > 0;
-      // console.log(el.raw.length)
     })
 
     tagInfoJSON[k] = contentTagNoKey
-    // console.log(JSON.stringify(contentTagNoKey))
-    // console.log(allTagsArray)
   }
   tagInfoJSON['allTags'] = allTagsArray;
   util.fileWrite(tagInfoJSON,'data/tagInfoMostRecentGeo.json')
