@@ -70,6 +70,8 @@
       d3.layout.cloud().size([1000, 500])
               .words(frequencyArray)
               .rotate(0)
+              .padding(4)
+              .text(function(d) { return d.text; }) // THE SOLUTION
               .fontSize(function(d) { return d.size*20; })
               .on("end", draw)
               .start();
@@ -87,7 +89,7 @@
                   .style("font-size", function(d) { return d.size + "px"; })
                   .style("fill", function(d, i) { return color(i); })
                   .attr("transform", function(d) {
-                      return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                      return "translate(" + [d.x, d.y] + ")rotate(" + 0 + ")";
                   })
                   .text(function(d) { return d.text; });
       }
