@@ -157,7 +157,7 @@
           "authorname": "joeginder",
           "raw": "'jrg Long Beach'",
           "_content": "jrglongbeach",
-          "machine_tag": 0
+          "machine_tag": false
         },
         {
           "id": "7009098-29242785367-4034",
@@ -197,7 +197,7 @@
           "authorname": "joeginder",
           "raw": "Ashlyn",
           "_content": "ashlyn",
-          "machine_tag": 0
+          "machine_tag": false
         },
         {
           "id": "7009098-29242785367-1443",
@@ -213,7 +213,7 @@
           "authorname": "joeginder",
           "raw": "Kylie",
           "_content": "kylie",
-          "machine_tag": 0
+          "machine_tag": false
         },
         {
           "id": "7009098-29242785367-647175",
@@ -221,7 +221,7 @@
           "authorname": "joeginder",
           "raw": "Malea",
           "_content": "malea",
-          "machine_tag": 0
+          "machine_tag": false
         },
         {
           "id": "7009098-29242785367-1316",
