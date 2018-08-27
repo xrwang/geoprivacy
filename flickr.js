@@ -4,8 +4,8 @@ const stringify = require('json-stringify-pretty-compact');
 const fs = require('fs');
 //function to get all the photos
 //exif
-let locationResultsList = [];
-
+const path = require('path');
+const GeoJSON = require('geojson');
 
 const jsonFlickrApi = (jsonp) => {
   let b = eval(jsonp);
@@ -18,18 +18,52 @@ const jsonFlickrApi = (jsonp) => {
   return (c)
 }
 
+// https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e0c7a0061d4d27fdcaa6bf5211b4359a&text=rhino&has_geo=1&page=&format=json&nojsoncallback=1&auth_token=72157697407099972-2e84e6652a37135a&api_sig=a7c931610055835ecc8703d0619e359d
+//0 is no geo
+//1 is has geo
+let flickrSearch = (stringToSearch, page, hasGeo, maxDate, perpage) => {
+  //maxDate parameter so that it's not all the photos, ever
+  return new Promise ((resolve, reject) => {
+    request('https://api.flickr.com/services/rest/?method='+'flickr.photos.search'+'&text='+ stringToSearch + '&page=' + page + '&max_taken_date=' + + maxDate + '&has_geo='+hasGeo+ '&per_page='+perpage+'&format=json&nojsoncallback=1&api+key='+FLICKR_TOKEN, function (error, response, body) {
+      if (error) reject (error);
+      if (response.statusCode != 200) {
+        reject('Invalid status code <' + response.statusCode + '>');
+      }
+      resolve(body);
+    });
+  });
+}
+
+let flickrPager = (firstPageData) => {
+  let pageData = JSON.parse(firstPageData);
+  let totalPages = pageData.photos.pages;
+  let total = pageData.photos.total;
+
+
+  let n = pageData.photos.pages;
+  let arrayToIterate = Array.apply(null, {length: n}).map(Number.call, Number);
+  let gatheredPhotoArray = [];
+  let promiseArray = [];
+
+  arrayToIterate.forEach((e) => {
+    let promise = flickrSearch('rhino', e, 1, oneYearAgo).then((result) => {
+      let response = JSON.parse(result);
+      let photoArray = response.photos.photo;
+      console.log('batch' + e)
+      return photoArray;
+    })
+    .catch('broken');
+    promiseArray.push(promise);
+  })
+  return Promise.all(promiseArray);
+}
+
 
 let idGenerator = (page) => {
   let photosList = page.photos.photo;
   let totalPhotos = page.photos.total;
   let totalOnOnePage = page.photos.perpage;
-  //Total On One page should be equal to listOfIds.length
   let listOfIds = photosList.map(x => x.id);
-  // console.log(listOfIds.length)
-  // console.log(totalOnOnePage)
-  // console.log(totalPhotos);
-  // console.log(page)
-  // console.log('how many photos' + photosList.length)
   return (listOfIds);
 }
 
@@ -119,6 +153,34 @@ let recent = (numberOfPhotos) => {
   });
 }
 
+
+//https://api.flickr.com/services/rest/?method=flickr.photos.geo.getLocation&api_key=47d16e3380d4aa938672c6037576f933&photo_id=30058652768&format=json&nojsoncallback=1&auth_token=72157672759073858-6dae54003424ed0a&api_sig=a5d25c144db7f4060549df457c7438c2
+
+let getGeoLocationOnly = (photoID) => {
+  return new Promise ((resolve, reject) => {
+        request('https://api.flickr.com/services/rest/?method='+'flickr.photos.geo.getLocation&photo_id=' + photoID + '&format=json&nojsoncallback=1'+'&api+key='+FLICKR_TOKEN, function (error, response, body) {
+        if (error) reject(error);
+        if (response.statusCode != 200) {
+          reject('Invalid status code <' + response.statusCode + '>');
+        }
+        resolve(body);
+      });
+  });
+}
+
+let getGeolocationForArray = (photoArray) => {
+  let promiseArray = [];
+  photoArray.forEach((e) => {
+    let promise = getGeoLocationOnly(e.id).then((result) => {
+      return JSON.parse(result);
+    })
+    .catch('broken');
+    promiseArray.push(promise)
+  });
+  return Promise.all(promiseArray);
+}
+
+
 let fileWrite = (dataToWrite, filename) => {
   fs.writeFile(filename, JSON.stringify(dataToWrite), 'utf8', function (err) {
   if (err) {
@@ -128,34 +190,62 @@ let fileWrite = (dataToWrite, filename) => {
   });
 }
 
-let getThousandPhotos = (arrayOfPages) => {
-
+let fileRead = (dataToRead) => {
+  let data = fs.readFileSync(dataToRead,'utf8');
+  return JSON.parse(data);
 }
 
 
+//read in a freeTextSearch array of geolocated results
+//read in the original free text search array
+//make a geojson file
+//3. build a geojson file
+//geojson parse uses:
+// { name: 'Location A', category: 'Store', street: 'Market', lat: 39.984, lng: -75.343 },
 
-recent(10).then((body) => {
-    let page = JSON.parse(JSON.parse(jsonFlickrApi(body)));
-    let listToSniff = idGenerator(page);
-    return listToSniff;
-  })
-  .then((list) => {
-    return getPhotosForLocation(list)
-  })
-  .then((photoLocationData) => {
-    return filterArrayForExifOnly(photoLocationData)
-    // console.log(JSON.stringify(photoLocationData));
-  })
-  .then((photoArrayWithLocationData) => {
-    return getTagsForEachGeoPhoto(photoArrayWithLocationData)
-  })
-  .then((photoLocationTags) => {
-    fileWrite(photoLocationTags, 'data/page10.json')
-  })
-  .catch('broken');
+let toGeojson = (searchResultsArray, searchResultsGeolocatedArray) => {
+  let arrayWithTitle = fileRead(searchResultsArray);
+  let arrayWithGeo = fileRead(searchResultsGeolocatedArray);
+  let formattedGeoData = [];
+  arrayWithGeo.forEach((e) => {
+    let idToSearch = e.photo.id;
+    let titleInfo = arrayWithTitle[0].find(photo => photo.id === idToSearch)
+    let flickrURL = 'https://flickr.com/photos/'+titleInfo.owner.toString()+'/'+titleInfo.id.toString()
+    let country = e.photo.location.country._content;
+    let lat = e.photo.location.latitude;
+    let lng = e.photo.location.longitude;
+    let title = titleInfo.title;
 
-  module.exports = {
+    let dataObject = {
+      'name': title,
+      'url': flickrURL,
+      'country': country,
+      'lat': lat,
+      'lng': lng
+    }
+    formattedGeoData.push(dataObject)
+  });
+  //formattedGeoData is now a long array that we can use geojson on.
+  let geoJSONFile = GeoJSON.parse(formattedGeoData, {Point: ['lat', 'lng']});
+  // console.log(JSON.stringify(geoJSONFile))
+  return geoJSONFile;
+}
+
+
+//2. how many of these are in known nature preserves?
+//3. get and plot on a map.
+//convert file to geojson
+
+
+
+module.exports = {
+  fileRead,
+  fileWrite,
   idGenerator,
   filterArrayForExifOnly,
-  getTagsForEachGeoPhoto
+  getTagsForEachGeoPhoto,
+  flickrSearch,
+  getGeoLocationOnly,
+  getGeolocationForArray,
+  toGeojson
 }

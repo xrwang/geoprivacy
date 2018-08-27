@@ -1,0 +1,352 @@
+{
+  "43276660295": [
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLatitudeRef",
+      "label": "GPS Latitude Ref",
+      "raw": {
+        "_content": "North"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLatitude",
+      "label": "GPS Latitude",
+      "raw": {
+        "_content": "39 deg 52' 27.27\""
+      },
+      "clean": {
+        "_content": "39 deg 52' 27.27\" N"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLongitudeRef",
+      "label": "GPS Longitude Ref",
+      "raw": {
+        "_content": "East"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLongitude",
+      "label": "GPS Longitude",
+      "raw": {
+        "_content": "18 deg 8' 6.33\""
+      },
+      "clean": {
+        "_content": "18 deg 8' 6.33\" E"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSAltitude",
+      "label": "GPS Altitude",
+      "raw": {
+        "_content": "2.124514991 m"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSTimeStamp",
+      "label": "GPS Time Stamp",
+      "raw": {
+        "_content": "00:00:00"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSDOP",
+      "label": "GPS DOP",
+      "raw": {
+        "_content": "1"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSDateStamp",
+      "label": "GPS Date Stamp",
+      "raw": {
+        "_content": "1970:01:01"
+      }
+    },
+    {
+      "camera": "Apple iPhone 7"
+    }
+  ],
+  "43276679635": [
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSVersionID",
+      "label": "GPS Version ID",
+      "raw": {
+        "_content": "2.3.0.0"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLatitudeRef",
+      "label": "GPS Latitude Ref",
+      "raw": {
+        "_content": "North"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLatitude",
+      "label": "GPS Latitude",
+      "raw": {
+        "_content": "35 deg 9' 54.30\""
+      },
+      "clean": {
+        "_content": "35 deg 9' 54.30\" N"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLongitudeRef",
+      "label": "GPS Longitude Ref",
+      "raw": {
+        "_content": "East"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLongitude",
+      "label": "GPS Longitude",
+      "raw": {
+        "_content": "136 deg 53' 58.90\""
+      },
+      "clean": {
+        "_content": "136 deg 53' 58.90\" E"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSAltitudeRef",
+      "label": "GPS Altitude Ref",
+      "raw": {
+        "_content": "Above Sea Level"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSAltitude",
+      "label": "GPS Altitude",
+      "raw": {
+        "_content": "45 m"
+      }
+    },
+    {
+      "camera": "Nikon D5500"
+    }
+  ],
+  "44134204722": [
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSVersionID",
+      "label": "GPS Version ID",
+      "raw": {
+        "_content": "2.2.0.0"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLatitudeRef",
+      "label": "GPS Latitude Ref",
+      "raw": {
+        "_content": "North"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLatitude",
+      "label": "GPS Latitude",
+      "raw": {
+        "_content": "52 deg 54' 12.40\""
+      },
+      "clean": {
+        "_content": "52 deg 54' 12.40\" N"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLongitudeRef",
+      "label": "GPS Longitude Ref",
+      "raw": {
+        "_content": "East"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLongitude",
+      "label": "GPS Longitude",
+      "raw": {
+        "_content": "7 deg 4' 28.51\""
+      },
+      "clean": {
+        "_content": "7 deg 4' 28.51\" E"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSAltitudeRef",
+      "label": "GPS Altitude Ref",
+      "raw": {
+        "_content": "Above Sea Level"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSAltitude",
+      "label": "GPS Altitude",
+      "raw": {
+        "_content": "58 m"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSTimeStamp",
+      "label": "GPS Time Stamp",
+      "raw": {
+        "_content": "10:10:24"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSStatus",
+      "label": "GPS Status",
+      "raw": {
+        "_content": "Measurement Active"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSMapDatum",
+      "label": "GPS Map Datum",
+      "raw": {
+        "_content": "WGS-84"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSDateStamp",
+      "label": "GPS Date Stamp",
+      "raw": {
+        "_content": "2018:08:21"
+      }
+    },
+    {
+      "camera": "Sony E6653"
+    }
+  ],
+  "44134216272": [
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLatitudeRef",
+      "label": "GPS Latitude Ref",
+      "raw": {
+        "_content": "North"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLatitude",
+      "label": "GPS Latitude",
+      "raw": {
+        "_content": "51 deg 7' 36.44\""
+      },
+      "clean": {
+        "_content": "51 deg 7' 36.44\" N"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLongitudeRef",
+      "label": "GPS Longitude Ref",
+      "raw": {
+        "_content": "West"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSLongitude",
+      "label": "GPS Longitude",
+      "raw": {
+        "_content": "1 deg 1' 39.90\""
+      },
+      "clean": {
+        "_content": "1 deg 1' 39.90\" W"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSAltitude",
+      "label": "GPS Altitude",
+      "raw": {
+        "_content": "173.8471761 m"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSTimeStamp",
+      "label": "GPS Time Stamp",
+      "raw": {
+        "_content": "00:00:00"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSDOP",
+      "label": "GPS DOP",
+      "raw": {
+        "_content": "1"
+      }
+    },
+    {
+      "tagspace": "GPS",
+      "tagspaceid": 0,
+      "tag": "GPSDateStamp",
+      "label": "GPS Date Stamp",
+      "raw": {
+        "_content": "1970:01:01"
+      }
+    },
+    {
+      "camera": "Apple iPhone 7"
+    }
+  ]
+}

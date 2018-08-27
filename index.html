@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <meta name="author" content="name">
+    <meta name="description" content="description here">
+    <meta name="keywords" content="keywords,here">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="main.css" type="text/css">
+    <script src='rhinos.js'></script>
+
+    <style>
+    body {
+        font-family:"Lucida Grande","Droid Sans",Arial,Helvetica,sans-serif;
+    }
+    .legend {
+        border: 1px solid #555555;
+        border-radius: 5px 5px 5px 5px;
+        font-size: 0.8em;
+        margin: 10px;
+        padding: 8px;
+    }
+    .bld {
+        font-weight: bold;
+    }
+</style>
+    <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+
+    <script src="src/wordcloud.js"></script>
+
+    <script type="text/javascript">
+
+    d3.json("./data/tagInfoMostRecentGeo.json", function(data) {
+      var frequency_list = {};
+      var wordsplitList = [];
+      var frequencyArray = [];
+
+      data.allTags.forEach((e) => {
+        var a = e.split(' ');
+        var merged = [].concat.apply([], a);
+        merged.toString().toLowerCase();
+        wordsplitList.push(merged)
+      })
+      var merged2 = [].concat.apply([], wordsplitList);
+      var listofLowercase = [];
+      var merged2lowercase = merged2.forEach(function(a) {
+        listofLowercase.push(a.toLowerCase());
+      });
+
+      var stats =  listofLowercase.reduce(function ( stats, word ) {
+       if ( stats.hasOwnProperty( word ) ) {
+           stats[ word ] = stats[ word ] + 1;
+       } else {
+           stats[ word ] = 1;
+       }
+       return stats
+     }, {});
+
+     // console.log(stats)
+      for(var k in stats ) {
+        var stat = {
+          'text': k,
+          'size': stats[k]
+        }
+        frequencyArray.push(stat)
+      }
+
+      var color = d3.scale.linear()
+              .domain([100,15,10,5,1])
+              .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+
+      d3.layout.cloud().size([1000, 500])
+              .words(frequencyArray)
+              .rotate(0)
+              .padding(4)
+              .text(function(d) { return d.text; }) // THE SOLUTION
+              .fontSize(function(d) { return d.size*20; })
+              .on("end", draw)
+              .start();
+
+      function draw(words) {
+          d3.select("body").append("svg")
+                  .attr("width", 1100)
+                  .attr("height", 550)
+                  .attr("class", "wordcloud")
+                  .append("g")
+                  .attr("transform", "translate(500,300)")
+                  .selectAll("text")
+                  .data(words)
+                  .enter().append("text")
+                  .style("font-size", function(d) { return d.size + "px"; })
+                  .style("fill", function(d, i) { return color(i); })
+                  .attr("transform", function(d) {
+                      return "translate(" + [d.x, d.y] + ")rotate(" + 0 + ")";
+                  })
+                  .text(function(d) { return d.text; });
+      }
+    });
+
+
+
+
+    </script>
+  </head>
+  <body>
+
+
+      <div class="coverimage">
+        HIII
+      </div>
+
+      <div class="explainer">
+        HIII
+      </div>
+
+      <div class="precedent">
+        HIII
+      </div>
+
+      <div class="flickrDataRecent">
+
+
+      </div>
+
+
+      <div class="flickrDataTags">
+        <svg></svg>
+
+
+      </div>
+
+      <div id="map">
+      </div>
+
+      <script src='src/map.js'>
+
+      </script>
+
+
+  </body>
+</html>
