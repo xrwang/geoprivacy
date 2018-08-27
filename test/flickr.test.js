@@ -9,7 +9,7 @@ require('../test/fixtures/photoArrayFlickrSearch');
 const photoArrayFlickrSearchGeo =
 require('../test/fixtures/photoArrayFlickrSearchGeolocated');
 const path = require('path');
-
+const properGeojson = require('../test/fixtures/formattedGeojsonFromTwoArrays');
 
 // test('an input long list of photos gives only photos that have GPS exif data', function (t) {
 //   const result = flickr.filterArrayForExifOnly(testLocationResults)
@@ -71,6 +71,9 @@ test('geojsonify JSON data', function (t) {
     let a = path.join(__dirname,'fixtures/photoArrayFlickrSearch.json')
     let b = path.join(__dirname,'fixtures/photoArrayFlickrSearchGeolocated.json')
     const result = flickr.toGeojson(a,b);
+    const expected = properGeojson;
+    console.log(result)
+    t.deepEqual(result, expected);
     t.ok(result);
     t.end();
 });

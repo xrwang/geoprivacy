@@ -5,7 +5,7 @@ const fs = require('fs');
 //function to get all the photos
 //exif
 const path = require('path');
-const geojson = require('geojson');
+const GeoJSON = require('geojson');
 
 const jsonFlickrApi = (jsonp) => {
   let b = eval(jsonp);
@@ -206,22 +206,11 @@ let fileRead = (dataToRead) => {
 let toGeojson = (searchResultsArray, searchResultsGeolocatedArray) => {
   let arrayWithTitle = fileRead(searchResultsArray);
   let arrayWithGeo = fileRead(searchResultsGeolocatedArray);
-  // console.log(arrayWithTitle[0])
-  // console.log(arrayWithGeo)
-
   let formattedGeoData = [];
-
-
   arrayWithGeo.forEach((e) => {
     let idToSearch = e.photo.id;
-
     let titleInfo = arrayWithTitle[0].find(photo => photo.id === idToSearch)
-    // console.log(idToSearch)
-    // console.log(titleInfo)
-    //
-    // })
     let flickrURL = 'https://flickr.com/photos/'+titleInfo.owner.toString()+'/'+titleInfo.id.toString()
-    // console.log(Object.keys(e.photo.location))
     let country = e.photo.location.country._content;
     let lat = e.photo.location.latitude;
     let lng = e.photo.location.longitude;
@@ -234,9 +223,12 @@ let toGeojson = (searchResultsArray, searchResultsGeolocatedArray) => {
       'lat': lat,
       'lng': lng
     }
-    console.log(dataObject)
+    formattedGeoData.push(dataObject)
   });
-
+  //formattedGeoData is now a long array that we can use geojson on.
+  let geoJSONFile = GeoJSON.parse(formattedGeoData, {Point: ['lat', 'lng']});
+  console.log(JSON.stringify(geoJSONFile))
+  return geoJSONFile;
 }
 
 
