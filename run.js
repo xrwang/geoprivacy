@@ -1,3 +1,5 @@
+const path = require('path');
+const flickr = require('./flickr');
 
 //call functions
 
@@ -41,3 +43,8 @@
 //   fileWrite(result, 'data/freetextSearchListFullGeolocated.json')
 // })
 // .catch('broken');
+let a = path.join(__dirname,'data/freetextSearchListFull.json')
+let b = path.join(__dirname,'data/freetextSearchListFullGeolocated.json')
+
+let c = flickr.toGeojson(a, b);
+flickr.fileWrite(c, 'data/geojson-of-rhinos.json')

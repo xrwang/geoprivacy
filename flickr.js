@@ -227,7 +227,7 @@ let toGeojson = (searchResultsArray, searchResultsGeolocatedArray) => {
   });
   //formattedGeoData is now a long array that we can use geojson on.
   let geoJSONFile = GeoJSON.parse(formattedGeoData, {Point: ['lat', 'lng']});
-  console.log(JSON.stringify(geoJSONFile))
+  // console.log(JSON.stringify(geoJSONFile))
   return geoJSONFile;
 }
 
