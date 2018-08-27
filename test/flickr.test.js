@@ -21,3 +21,18 @@ test('an input list of photos with GPS and Camera data gets tags appended to it'
     t.end();
   });
 });
+
+
+
+test('flickr search works for tag and date', function (t) {
+
+  let now = new Date();
+  let oneYearAgo = new Date().setFullYear(now.getFullYear()-1);
+
+
+  const result = flickr.flickrSearch('rhino', '1', '1', oneYearAgo).then((result) => {
+    console.log(result)
+    t.ok(result);
+    t.end();
+  });
+});

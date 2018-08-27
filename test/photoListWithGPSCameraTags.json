@@ -157,7 +157,7 @@
           "authorname": "joeginder",
           "raw": "'jrg Long Beach'",
           "_content": "jrglongbeach",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "7009098-29242785367-4034",
@@ -165,7 +165,7 @@
           "authorname": "joeginder",
           "raw": "Blue Line",
           "_content": "blueline",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "7009098-29242785367-507",
@@ -173,7 +173,7 @@
           "authorname": "joeginder",
           "raw": "Laura",
           "_content": "laura",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "7009098-29242785367-18012",
@@ -181,7 +181,7 @@
           "authorname": "joeginder",
           "raw": "Belle",
           "_content": "belle",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "7009098-29242785367-249503500",
@@ -189,7 +189,7 @@
           "authorname": "joeginder",
           "raw": "Vanrith",
           "_content": "vanrith",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "7009098-29242785367-95861",
@@ -197,7 +197,7 @@
           "authorname": "joeginder",
           "raw": "Ashlyn",
           "_content": "ashlyn",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "7009098-29242785367-1443",
@@ -205,7 +205,7 @@
           "authorname": "joeginder",
           "raw": "John",
           "_content": "john",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "7009098-29242785367-4080",
@@ -213,7 +213,7 @@
           "authorname": "joeginder",
           "raw": "Kylie",
           "_content": "kylie",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "7009098-29242785367-647175",
@@ -221,7 +221,7 @@
           "authorname": "joeginder",
           "raw": "Malea",
           "_content": "malea",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "7009098-29242785367-1316",
@@ -229,7 +229,7 @@
           "authorname": "joeginder",
           "raw": "train",
           "_content": "train",
-          "machine_tag": false
+          "machine_tag": 0
         }
       ]
     }
@@ -255,7 +255,7 @@
           "authorname": "teknisyenarif",
           "raw": "insanlar",
           "_content": "insanlar",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "83719150-42371990140-2636050",
@@ -263,7 +263,7 @@
           "authorname": "teknisyenarif",
           "raw": "turizm",
           "_content": "turizm",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "83719150-42371990140-18130743",
@@ -271,7 +271,7 @@
           "authorname": "teknisyenarif",
           "raw": "bayramtatili",
           "_content": "bayramtatili",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "83719150-42371990140-2077094",
@@ -279,7 +279,7 @@
           "authorname": "teknisyenarif",
           "raw": "kurbanbayramı",
           "_content": "kurbanbayramı",
-          "machine_tag": false
+          "machine_tag": 0
         },
         {
           "id": "83719150-42371990140-2060810",
@@ -287,7 +287,7 @@
           "authorname": "teknisyenarif",
           "raw": "doludolu",
           "_content": "doludolu",
-          "machine_tag": false
+          "machine_tag": 0
         }
       ]
     }
