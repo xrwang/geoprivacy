@@ -12,41 +12,118 @@ var map = new mapboxgl.Map({
 
 map.on('style.load', function () {
     map.addSource("markers", {
-        "type": "geojson",
-        "data": rhinos
+      type: 'geojson',
+      data: 'https://cdn.rawgit.com/xrwang/geoprivacy/master/data/rhinos.json?token=AD1W2cn2J22G3JH0dKLD0CVkZhK84zx_ks5bjgKrwA%3D%3D',
+      cluster: true,
+      clusterMaxZoom: 14, // Max zoom to cluster points on
+      clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+    });
+
+
+    map.addLayer({
+        id: "clusters",
+        type: "circle",
+        source: "markers",
+        filter: ["has", "point_count"],
+        paint: {
+            // Use step expressions (https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+            // with three steps to implement three types of circles:
+            //   * Blue, 20px circles when point count is less than 100
+            //   * Yellow, 30px circles when point count is between 100 and 750
+            //   * Pink, 40px circles when point count is greater than or equal to 750
+            "circle-color": [
+                "step",
+                ["get", "point_count"],
+                "#51bbd6",
+                100,
+                "#f1f075",
+                750,
+                "#f28cb1"
+            ],
+            "circle-radius": [
+                "step",
+                ["get", "point_count"],
+                20,
+                100,
+                30,
+                750,
+                40
+            ]
+        }
+    });
+
+
+
+    map.addLayer({
+        id: "unclustered-point",
+        type: "circle",
+        source: "markers",
+        filter: ["!", ["has", "point_count"]],
+        paint: {
+            "circle-color": "#11b4da",
+            "circle-radius": 4,
+            "circle-stroke-width": 1,
+            "circle-stroke-color": "#fff"
+        }
     });
 
     map.addLayer({
-        "id": "markers",
-        "interactive": true,
-        "type": "symbol",
-        "source": "markers",
-        "layout": {
-            "icon-image": "superfund",
-            "icon-size": 0.75
-        },
-        "paint": {
-            /*"text-size": 10,*/
+        id: "markers",
+        type: "circle",
+        source: "markers",
+        paint: {
+            "circle-color": "#cd0000",
+            "circle-radius": 4,
+            "circle-stroke-width": 1,
+            "circle-stroke-color": "#fff"
         }
     });
+
+
+    map.addLayer({
+        id: "cluster-count",
+        type: "symbol",
+        source: "markers",
+        filter: ["has", "point_count"],
+        layout: {
+            "text-field": "{point_count_abbreviated}",
+            "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+            "text-size": 12
+        }
+    });
+
+    map.on('click', 'clusters', function (e) {
+      var features = map.queryRenderedFeatures(e.point, { layers: ['clusters'] });
+      var clusterId = features[0].properties.cluster_id;
+      map.getSource('markers').getClusterExpansionZoom(clusterId, function (err, zoom) {
+          if (err)
+              return;
+
+          map.easeTo({
+              center: features[0].geometry.coordinates,
+              zoom: zoom
+          });
+      });
+    });
+
+    map.on('mouseenter', 'clusters', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'clusters', function () {
+        map.getCanvas().style.cursor = '';
+    });
+
+    map.on('click', 'markers', function(e) {
+      new mapboxgl.Popup()
+        .setLngLat(e.features[0].geometry.coordinates)
+        .setHTML('<b>Title</b> ' + e.features[0].properties.name  +'<br><br>'+'<b>URL</b>'+ '<a href='+e.features[0].properties.url+' target="blank">'+e.features[0].properties.url+'</a>')
+        .addTo(map);
+    });
+
 });
 
-// map.on('click', function (e) {
-//
-//     map.featuresAt(e.point, {layer: 'markers', radius: 10, includeGeometry: true}, function (err, features) {
-//         if (err) throw err;
-//         if (features.length) {
-//             var featureName = features[0].properties.NAME;
-//             var featureHRS= features[0].properties.HRS;
-//             var featureStat = features[0].properties.NPLSTAT;
-//             var featureDate = features[0].properties.STATUS_DAT;
-//             var tooltip = new mapboxgl.Popup()
-//                 .setLngLat(e.lngLat)
-//                 .setHTML('<p>' + 'Name of site: '+ featureName + '</br>'+'HRS: '+ featureHRS + '</br>' + 'Status of site: '+ featureStat +'</br>'+ 'Last status update: ' + featureDate + '</p>' )
-//                 .addTo(map);
-//         }
-//     });
-// });
+
+
 
 
 // Use the same approach as above to indicate that the symbols are clickable
@@ -64,13 +141,7 @@ map.on('style.load', function () {
 // var geoc = map.addControl(geocoder);
 
 
-
-
-
 var geolocate = document.getElementById('current-location-btn');
-
-
-
 
 
 

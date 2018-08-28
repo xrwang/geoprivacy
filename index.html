@@ -81,7 +81,7 @@
               .start();
 
       function draw(words) {
-          d3.select("body").append("svg")
+          d3.select("div.flickrDataRecent").append("svg")
                   .attr("width", 1100)
                   .attr("height", 550)
                   .attr("class", "wordcloud")
@@ -108,34 +108,36 @@
 
 
       <div class="coverimage">
-        HIII
+        Here is a cover image.
       </div>
 
       <div class="explainer">
-        HIII
+        What is GPS Privacy?
       </div>
 
       <div class="precedent">
-        HIII
+        Based on Ross Anderson's work
       </div>
 
+      <div class="precedent">
+        What is going on with geoprivacy now?
+      </div>
+
+
+      <div class="flickr">
+        Why flickr?
+        How prevalent is this on flickr?
+      </div>
+
+      <!--here is a section for the word cloud-->
       <div class="flickrDataRecent">
-
-
       </div>
 
-
-      <div class="flickrDataTags">
-        <svg></svg>
-
-
-      </div>
-
+      <div id="current-location-btn"></div>
       <div id="map">
       </div>
 
       <script src='src/map.js'>
-
       </script>
 
 

@@ -1,4 +1,12 @@
 #map, mapboxgl-map {
-  position:absolute;
   overflow: visible;
+  width: 80%;
+  height: 900px;
+}
+
+
+#current-location-btn {
+  width: 20px;
+  height: 20px;
+  border: 2px solid red;
 }
