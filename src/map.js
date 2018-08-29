@@ -2,8 +2,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaWFtd2VybmVyaGVyem9nIiwiYSI6ImNpemFiNWNnZzAxc
 var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/iamwernerherzog/cjlcx906q4wnp2rn6gi20c9pt', //stylesheet location
-    center: [-74.50, 40], // starting position
-    zoom: 6// starting zoom
+    center: [26, 28], // starting position
+    zoom: 2// starting zoom
 });
 
 // map.addControl(new mapboxgl.Navigation());
@@ -17,6 +17,38 @@ map.on('style.load', function () {
       cluster: true,
       clusterMaxZoom: 14, // Max zoom to cluster points on
       clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+    });
+
+    map.addLayer({
+      'id': "conservation-areas1",
+      'type': 'fill',
+      'source' :
+      {
+        'type':'geojson',
+        'data': 'https://cdn.rawgit.com/xrwang/geoprivacy/2c99dde5/data/existingData/SACAD.geojson',
+
+      },
+      'layout': {},
+        'paint': {
+            'fill-color': '#088',
+            'fill-opacity': 0.8
+        }
+    });
+
+    map.addLayer({
+      'id': "conservation-areas2",
+      'type': 'fill',
+      'source' :
+      {
+        'type':'geojson',
+        'data': 'https://cdn.rawgit.com/xrwang/geoprivacy/2c99dde5/data/existingData/SAPAD.geojson',
+
+      },
+      'layout': {},
+        'paint': {
+            'fill-color': '#088',
+            'fill-opacity': 0.8
+        }
     });
 
 
