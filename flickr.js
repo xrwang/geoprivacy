@@ -26,7 +26,7 @@ let flickrSearch = (stringToSearch, page, hasGeo, maxDate, perpage) => {
   return new Promise ((resolve, reject) => {
     request('https://api.flickr.com/services/rest/?method='+'flickr.photos.search'+'&text='+ stringToSearch + '&page=' + page + '&max_taken_date=' + + maxDate + '&has_geo='+hasGeo+ '&per_page='+perpage+'&format=json&nojsoncallback=1&api+key='+FLICKR_TOKEN, function (error, response, body) {
       if (error) reject (error);
-      if (response.statusCode != 200) {
+      if (response && response.statusCode && response.statusCode != 200) {
         reject('Invalid status code <' + response.statusCode + '>');
       }
       resolve(body);
@@ -52,7 +52,9 @@ let flickrPager = (firstPageData, stringToSearch, oneYearAgo) => {
       console.log('batch' + e)
       return photoArray;
     })
-    .catch('broken');
+    .catch(function(error) {
+      console.log(error);
+    });
     promiseArray.push(promise);
   })
   return Promise.all(promiseArray);
@@ -161,7 +163,7 @@ let getGeoLocationOnly = (photoID) => {
         request('https://api.flickr.com/services/rest/?method='+'flickr.photos.geo.getLocation&photo_id=' + photoID + '&format=json&nojsoncallback=1'+'&api+key='+FLICKR_TOKEN, function (error, response, body) {
         if (error) reject(error);
         // console.log(response.statusCode)
-        if (response.statusCode && response.statusCode != 200) {
+        if (response && response.statusCode && response.statusCode != 200) {
           reject('Invalid status code <' + response.statusCode + '>');
         }
         resolve(body);
@@ -173,13 +175,14 @@ let getGeolocationForArray = (photoArray) => {
   let promiseArray = [];
   console.log(photoArray.length)
   photoArray.forEach((e) => {
-    console.log(e[0])
-    if (e[0] && e[0].id) {
+    if (e && e[0] && e[0].id) {
       let promise = getGeoLocationOnly(e[0].id).then((result) => {
         console.log(result)
         return JSON.parse(result);
       })
-      .catch('broken');
+      .catch(function(error) {
+        console.log(error)
+      });
       promiseArray.push(promise)
     }
   });
@@ -214,21 +217,33 @@ let toGeojson = (searchResultsArray, searchResultsGeolocatedArray) => {
   let arrayWithGeo = fileRead(searchResultsGeolocatedArray);
   let formattedGeoData = [];
   let arrayWithTitleFormatted = [];
+  let arrayWithGeoFormatted = [];
 
   arrayWithTitle.forEach((e) => {
-    if (e[0] && e[0].id) {
-      //error handling above 
+    if (e && e[0] && e[0].id) {
+      //error handling above
       arrayWithTitleFormatted.push(e[0])
     }
   });
 
   arrayWithGeo.forEach((e) => {
+    if (e) {
+      //error handling above
+      console.log(e)
+      arrayWithGeoFormatted.push(e)
+    }
+  })
+
+  arrayWithGeoFormatted.forEach((e) => {
     let idToSearch = e.photo.id;
     let titleInfo = arrayWithTitleFormatted.find(photo => photo.id === idToSearch)
     console.log(titleInfo)
 
     let flickrURL = 'https://flickr.com/photos/'+titleInfo.owner.toString()+'/'+titleInfo.id.toString()
-    let country = e.photo.location.country._content;
+    let country =  function () {
+      if (e.photo.location.country._content) {
+      return e.photo.location.country._content;
+    } else return 'na' } ;
     let lat = e.photo.location.latitude;
     let lng = e.photo.location.longitude;
     let title = titleInfo.title;
