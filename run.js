@@ -26,25 +26,26 @@ const flickr = require('./flickr');
 
 //1. gather up the total photos for past year with the word rhino
 
-// let now = new Date();
-// let oneYearAgo = new Date().setFullYear(now.getFullYear()-1);
-//
-// flickrSearch('rhino', 1, 1, oneYearAgo, 500).then((result) => {
-//   return flickrPager(result);
+let now = new Date();
+let oneYearAgo = new Date().setFullYear(now.getFullYear()-1);
+
+// flickr.flickrSearch('tiger', 1, 1, oneYearAgo, 500).then((result) => {
+//   return flickr.flickrPager(result, 'tiger', oneYearAgo);
 // }).then((result) => {
-//   fileWrite(result, 'data/freetextSearchListFull.json')
+//   flickr.fileWrite(result, 'data/freetextSearchListFulltigers.json')
 // })
 // .catch('broken');
 
 
 //2. read in, get the ID of the photo, build geolocation file
-// let photoArrayFromSearchResults = fileRead(path.join(__dirname,'data/freetextSearchList.json'));
-// getGeolocationForArray(photoArrayFromSearchResults[0]).then((result) => {
-//   fileWrite(result, 'data/freetextSearchListFullGeolocated.json')
-// })
-// .catch('broken');
-let a = path.join(__dirname,'data/freetextSearchListFull.json')
-let b = path.join(__dirname,'data/freetextSearchListFullGeolocated.json')
+let photoArrayFromSearchResults = flickr.fileRead(path.join(__dirname,'data/freetextSearchListFulltigers.json'));
+flickr.getGeolocationForArray(photoArrayFromSearchResults).then((result) => {
+  flickr.fileWrite(result, 'data/freetextSearchListFullGeolocatedTigers.json')
+})
+.catch('broken');
 
-let c = flickr.toGeojson(a, b);
-flickr.fileWrite(c, 'data/geojson-of-rhinos.json')
+// let a = path.join(__dirname,'data/freetextSearchListFull.json')
+// let b = path.join(__dirname,'data/freetextSearchListFullGeolocated.json')
+
+// let c = flickr.toGeojson(a, b);
+// flickr.fileWrite(c, 'data/geojson-of-rhinos.json')

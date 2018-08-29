@@ -34,7 +34,7 @@ let flickrSearch = (stringToSearch, page, hasGeo, maxDate, perpage) => {
   });
 }
 
-let flickrPager = (firstPageData) => {
+let flickrPager = (firstPageData, stringToSearch, oneYearAgo) => {
   let pageData = JSON.parse(firstPageData);
   let totalPages = pageData.photos.pages;
   let total = pageData.photos.total;
@@ -46,7 +46,7 @@ let flickrPager = (firstPageData) => {
   let promiseArray = [];
 
   arrayToIterate.forEach((e) => {
-    let promise = flickrSearch('rhino', e, 1, oneYearAgo).then((result) => {
+    let promise = flickrSearch(stringToSearch, e, 1, oneYearAgo).then((result) => {
       let response = JSON.parse(result);
       let photoArray = response.photos.photo;
       console.log('batch' + e)
@@ -160,7 +160,8 @@ let getGeoLocationOnly = (photoID) => {
   return new Promise ((resolve, reject) => {
         request('https://api.flickr.com/services/rest/?method='+'flickr.photos.geo.getLocation&photo_id=' + photoID + '&format=json&nojsoncallback=1'+'&api+key='+FLICKR_TOKEN, function (error, response, body) {
         if (error) reject(error);
-        if (response.statusCode != 200) {
+        // console.log(response.statusCode)
+        if (response.statusCode && response.statusCode != 200) {
           reject('Invalid status code <' + response.statusCode + '>');
         }
         resolve(body);
@@ -170,12 +171,17 @@ let getGeoLocationOnly = (photoID) => {
 
 let getGeolocationForArray = (photoArray) => {
   let promiseArray = [];
+  console.log(photoArray.length)
   photoArray.forEach((e) => {
-    let promise = getGeoLocationOnly(e.id).then((result) => {
-      return JSON.parse(result);
-    })
-    .catch('broken');
-    promiseArray.push(promise)
+    console.log(e[0])
+    if (e[0] && e[0].id) {
+      let promise = getGeoLocationOnly(e[0].id).then((result) => {
+        console.log(result)
+        return JSON.parse(result);
+      })
+      .catch('broken');
+      promiseArray.push(promise)
+    }
   });
   return Promise.all(promiseArray);
 }
@@ -207,9 +213,21 @@ let toGeojson = (searchResultsArray, searchResultsGeolocatedArray) => {
   let arrayWithTitle = fileRead(searchResultsArray);
   let arrayWithGeo = fileRead(searchResultsGeolocatedArray);
   let formattedGeoData = [];
+  console.log(arrayWithGeo)
+  console.log('array with titleBelow')
+  console.log(arrayWithTitle)
+
+  arrayWithGeo.forEach((e) => {
+
+  });
+
   arrayWithGeo.forEach((e) => {
     let idToSearch = e.photo.id;
-    let titleInfo = arrayWithTitle[0].find(photo => photo.id === idToSearch)
+    let titleInfo = arrayWithTitle.find(photo => photo.id === idToSearch)
+    console.log('----------')
+    console.log(arrayWithTitle[0])
+    console.log('----------')
+
     let flickrURL = 'https://flickr.com/photos/'+titleInfo.owner.toString()+'/'+titleInfo.id.toString()
     let country = e.photo.location.country._content;
     let lat = e.photo.location.latitude;
@@ -245,6 +263,7 @@ module.exports = {
   filterArrayForExifOnly,
   getTagsForEachGeoPhoto,
   flickrSearch,
+  flickrPager,
   getGeoLocationOnly,
   getGeolocationForArray,
   toGeojson
