@@ -27,7 +27,21 @@ Used Flickr API because Instagram has new policies, given Facebook's Cambridge A
 8. Results:
 Most recent
 32 geotagged out of 1000
-Total of TK photos on
+Total of TK photos on Flickr
+iPhones only increasing, and data is included on photos by default
+
+Tags have a range, but surprisingly include bird (Oenethe)
+
+9. Looking at Rhinos specifically
+Location, images
+overlap with parks/conservation areas
+
+what about tigers?
+
+
+
+10. Solutions
+Flickr GPS bot?
 
 Javascript
 1. object oriented
