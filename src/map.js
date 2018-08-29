@@ -1,7 +1,7 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiaWFtd2VybmVyaGVyem9nIiwiYSI6ImNpemFiNWNnZzAxcngzMnRldG05OXZ6a3QifQ.DNmFL4Ue09E4QGLM14aoHg';
 var map = new mapboxgl.Map({
     container: 'map', // container id
-    style: 'mapbox://styles/iamwernerherzog/cjlcx906q4wnp2rn6gi20c9pt', //stylesheet location
+    style: 'mapbox://styles/iamwernerherzog/cjlcx906q4wnp2rn6gi20c9pt?fresh=true', //stylesheet location
     center: [26, 28], // starting position
     zoom: 2// starting zoom
 });
@@ -14,6 +14,14 @@ map.on('style.load', function () {
     map.addSource("markers", {
       type: 'geojson',
       data: 'https://cdn.rawgit.com/xrwang/geoprivacy/master/data/rhinos.json?token=AD1W2cn2J22G3JH0dKLD0CVkZhK84zx_ks5bjgKrwA%3D%3D',
+      cluster: true,
+      clusterMaxZoom: 14, // Max zoom to cluster points on
+      clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+    });
+
+    map.addSource("tigers", {
+      type: 'geojson',
+      data: 'https://cdn.rawgit.com/xrwang/geoprivacy/6cee21df/data/geojson-of-tigers.json',
       cluster: true,
       clusterMaxZoom: 14, // Max zoom to cluster points on
       clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
@@ -146,6 +154,93 @@ map.on('style.load', function () {
     });
 
     map.on('click', 'markers', function(e) {
+      new mapboxgl.Popup()
+        .setLngLat(e.features[0].geometry.coordinates)
+        .setHTML('<b>Title</b> ' + e.features[0].properties.name  +'<br><br>'+'<b>URL</b>'+ '<a href='+e.features[0].properties.url+' target="blank">'+e.features[0].properties.url+'</a>')
+        .addTo(map);
+    });
+
+//tigers
+    map.addLayer({
+        id: "clusters-tigers",
+        type: "circle",
+        source: "tigers",
+        filter: ["has", "point_count"],
+        paint: {
+            // Use step expressions (https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+            // with three steps to implement three types of circles:
+            //   * Blue, 20px circles when point count is less than 100
+            //   * Yellow, 30px circles when point count is between 100 and 750
+            //   * Pink, 40px circles when point count is greater than or equal to 750
+            "circle-color": [
+                "step",
+                ["get", "point_count"],
+                "#51bbff",
+                100,
+                "#f1f0ff",
+                750,
+                "#f28cff"
+            ],
+            "circle-radius": [
+                "step",
+                ["get", "point_count"],
+                20,
+                100,
+                30,
+                750,
+                40
+            ]
+        }
+    });
+
+
+
+    map.addLayer({
+        id: "unclustered-point-tigers",
+        type: "circle",
+        source: "tigers",
+        filter: ["!", ["has", "point_count"]],
+        paint: {
+            "circle-color": "#11b4ff",
+            "circle-radius": 4,
+            "circle-stroke-width": 1,
+            "circle-stroke-color": "#fff"
+        }
+    });
+
+    map.addLayer({
+        id: "tigers",
+        type: "circle",
+        source: "tigers",
+        paint: {
+            "circle-color": "#cd00ff",
+            "circle-radius": 4,
+            "circle-stroke-width": 1,
+            "circle-stroke-color": "#fff"
+        }
+    });
+
+
+    map.addLayer({
+        id: "cluster-count-tigers",
+        type: "symbol",
+        source: "tigers",
+        filter: ["has", "point_count"],
+        layout: {
+            "text-field": "{point_count_abbreviated}",
+            "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+            "text-size": 12
+        }
+    });
+
+    map.on('mouseenter', 'clusters-tigers', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'clusters-tigers', function () {
+        map.getCanvas().style.cursor = '';
+    });
+
+    map.on('click', 'tigers', function(e) {
       new mapboxgl.Popup()
         .setLngLat(e.features[0].geometry.coordinates)
         .setHTML('<b>Title</b> ' + e.features[0].properties.name  +'<br><br>'+'<b>URL</b>'+ '<a href='+e.features[0].properties.url+' target="blank">'+e.features[0].properties.url+'</a>')

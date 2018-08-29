@@ -29,12 +29,12 @@ const flickr = require('./flickr');
 let now = new Date();
 let oneYearAgo = new Date().setFullYear(now.getFullYear()-1);
 
-// flickr.flickrSearch('tiger', 1, 1, oneYearAgo, 500).then((result) => {
-//   return flickr.flickrPager(result, 'tiger', oneYearAgo);
-// }).then((result) => {
-//   flickr.fileWrite(result, 'data/freetextSearchListFulltigers.json')
-// })
-// .catch('broken');
+flickr.flickrSearch('elephant', 1, 1, oneYearAgo, 500).then((result) => {
+  return flickr.flickrPager(result, 'tiger', oneYearAgo);
+}).then((result) => {
+  flickr.fileWrite(result, 'data/freetextSearchListFullElephant.json')
+})
+.catch('broken');
 
 
 //2. read in, get the ID of the photo, build geolocation file
@@ -44,8 +44,8 @@ let oneYearAgo = new Date().setFullYear(now.getFullYear()-1);
 // })
 // .catch('broken');
 
-let a = path.join(__dirname,'data/freetextSearchListFulltigers.json')
-let b = path.join(__dirname,'data/freetextSearchListFullGeolocatedTigers.json')
-
-let c = flickr.toGeojson(a, b);
-flickr.fileWrite(c, 'data/geojson-of-tigers.json')
+// let a = path.join(__dirname,'data/freetextSearchListFulltigers.json')
+// let b = path.join(__dirname,'data/freetextSearchListFullGeolocatedTigers.json')
+//
+// let c = flickr.toGeojson(a, b);
+// flickr.fileWrite(c, 'data/geojson-of-tigers.json')
