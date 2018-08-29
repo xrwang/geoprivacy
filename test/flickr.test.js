@@ -67,13 +67,12 @@ const properGeojson = require('../test/fixtures/formattedGeojsonFromTwoArrays');
 // });
 
 
-// test('geojsonify JSON data', function (t) {
-//     let a = path.join(__dirname,'fixtures/photoArrayFlickrSearch.json')
-//     let b = path.join(__dirname,'fixtures/photoArrayFlickrSearchGeolocated.json')
-//     const result = flickr.toGeojson(a,b);
-//     const expected = properGeojson;
-//     console.log(result)
-//     t.deepEqual(result, expected);
-//     t.ok(result);
-//     t.end();
-// });
+test('geojsonify JSON data', function (t) {
+    let a = path.join(__dirname,'fixtures/photoArrayFlickrSearch.json')
+    let b = path.join(__dirname,'fixtures/photoArrayFlickrSearchGeolocated.json')
+    const result = flickr.toGeojson(a,b);
+    const expected = properGeojson;
+    t.deepEqual(result, expected);
+    t.ok(result);
+    t.end();
+});

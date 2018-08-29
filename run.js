@@ -38,14 +38,14 @@ let oneYearAgo = new Date().setFullYear(now.getFullYear()-1);
 
 
 //2. read in, get the ID of the photo, build geolocation file
-let photoArrayFromSearchResults = flickr.fileRead(path.join(__dirname,'data/freetextSearchListFulltigers.json'));
-flickr.getGeolocationForArray(photoArrayFromSearchResults).then((result) => {
-  flickr.fileWrite(result, 'data/freetextSearchListFullGeolocatedTigers.json')
-})
-.catch('broken');
+// let photoArrayFromSearchResults = flickr.fileRead(path.join(__dirname,'data/freetextSearchListFulltigers.json'));
+// flickr.getGeolocationForArray(photoArrayFromSearchResults).then((result) => {
+//   flickr.fileWrite(result, 'data/freetextSearchListFullGeolocatedTigers.json')
+// })
+// .catch('broken');
 
-// let a = path.join(__dirname,'data/freetextSearchListFull.json')
-// let b = path.join(__dirname,'data/freetextSearchListFullGeolocated.json')
+let a = path.join(__dirname,'data/freetextSearchListFulltigers.json')
+let b = path.join(__dirname,'data/freetextSearchListFullGeolocatedTigers.json')
 
-// let c = flickr.toGeojson(a, b);
-// flickr.fileWrite(c, 'data/geojson-of-rhinos.json')
+let c = flickr.toGeojson(a, b);
+flickr.fileWrite(c, 'data/geojson-of-tigers.json')

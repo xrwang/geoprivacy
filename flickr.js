@@ -213,20 +213,19 @@ let toGeojson = (searchResultsArray, searchResultsGeolocatedArray) => {
   let arrayWithTitle = fileRead(searchResultsArray);
   let arrayWithGeo = fileRead(searchResultsGeolocatedArray);
   let formattedGeoData = [];
-  console.log(arrayWithGeo)
-  console.log('array with titleBelow')
-  console.log(arrayWithTitle)
+  let arrayWithTitleFormatted = [];
 
-  arrayWithGeo.forEach((e) => {
-
+  arrayWithTitle.forEach((e) => {
+    if (e[0] && e[0].id) {
+      //error handling above 
+      arrayWithTitleFormatted.push(e[0])
+    }
   });
 
   arrayWithGeo.forEach((e) => {
     let idToSearch = e.photo.id;
-    let titleInfo = arrayWithTitle.find(photo => photo.id === idToSearch)
-    console.log('----------')
-    console.log(arrayWithTitle[0])
-    console.log('----------')
+    let titleInfo = arrayWithTitleFormatted.find(photo => photo.id === idToSearch)
+    console.log(titleInfo)
 
     let flickrURL = 'https://flickr.com/photos/'+titleInfo.owner.toString()+'/'+titleInfo.id.toString()
     let country = e.photo.location.country._content;
