@@ -27,6 +27,15 @@ map.on('style.load', function () {
       clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
     });
 
+    map.addSource("elephants", {
+      type: 'geojson',
+      data: 'https://cdn.rawgit.com/xrwang/geoprivacy/b445142b/data/geojson-of-elephants.json',
+      cluster: true,
+      clusterMaxZoom: 14, // Max zoom to cluster points on
+      clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+    });
+
+
     map.addLayer({
       'id': "conservation-areas1",
       'type': 'fill',
@@ -241,6 +250,96 @@ map.on('style.load', function () {
     });
 
     map.on('click', 'tigers', function(e) {
+      new mapboxgl.Popup()
+        .setLngLat(e.features[0].geometry.coordinates)
+        .setHTML('<b>Title</b> ' + e.features[0].properties.name  +'<br><br>'+'<b>URL</b>'+ '<a href='+e.features[0].properties.url+' target="blank">'+e.features[0].properties.url+'</a>')
+        .addTo(map);
+    });
+
+
+
+    //elephants
+
+    map.addLayer({
+        id: "clusters-elephants",
+        type: "circle",
+        source: "elephants",
+        filter: ["has", "point_count"],
+        paint: {
+            // Use step expressions (https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+            // with three steps to implement three types of circles:
+            //   * Blue, 20px circles when point count is less than 100
+            //   * Yellow, 30px circles when point count is between 100 and 750
+            //   * Pink, 40px circles when point count is greater than or equal to 750
+            "circle-color": [
+                "step",
+                ["get", "point_count"],
+                "#51bbff",
+                100,
+                "#f1f0ff",
+                750,
+                "#f28cff"
+            ],
+            "circle-radius": [
+                "step",
+                ["get", "point_count"],
+                20,
+                100,
+                30,
+                750,
+                40
+            ]
+        }
+    });
+
+
+
+    map.addLayer({
+        id: "unclustered-point-elephants",
+        type: "circle",
+        source: "elephants",
+        filter: ["!", ["has", "point_count"]],
+        paint: {
+            "circle-color": "#11b4ff",
+            "circle-radius": 4,
+            "circle-stroke-width": 1,
+            "circle-stroke-color": "#fff"
+        }
+    });
+
+    map.addLayer({
+        id: "elephants",
+        type: "circle",
+        source: "elephants",
+        paint: {
+            "circle-color": "#cd00ff",
+            "circle-radius": 4,
+            "circle-stroke-width": 1,
+            "circle-stroke-color": "#fff"
+        }
+    });
+
+
+    map.addLayer({
+        id: "cluster-count-elephants",
+        type: "symbol",
+        source: "elephants",
+        filter: ["has", "point_count"],
+        layout: {
+            "text-field": "{point_count_abbreviated}",
+            "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+            "text-size": 12
+        }
+    });
+
+    map.on('mouseenter', 'clusters-elephants', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'clusters-elephants', function () {
+        map.getCanvas().style.cursor = '';
+    });
+
+    map.on('click', 'elephants', function(e) {
       new mapboxgl.Popup()
         .setLngLat(e.features[0].geometry.coordinates)
         .setHTML('<b>Title</b> ' + e.features[0].properties.name  +'<br><br>'+'<b>URL</b>'+ '<a href='+e.features[0].properties.url+' target="blank">'+e.features[0].properties.url+'</a>')
