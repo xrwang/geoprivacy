@@ -37,6 +37,13 @@ let oneYearAgo = new Date().setMonth(now.getMonth()-6);
 // .catch(function(error) {
 //   console.log(error);
 // });
+// flickr.flickrSearch('elephant', 1, 1, oneYearAgo, 500).then((result) => {
+//   return flickr.flickrPager(result, 'tiger', oneYearAgo);
+// }).then((result) => {
+//   flickr.fileWrite(result, 'data/freetextSearchListFullElephant.json')
+// })
+// .catch('broken');
+//
 
 //2. read in, get the ID of the photo, build geolocation file
 // let photoArrayFromSearchResults = flickr.fileRead(path.join(__dirname,'data/freetextSearchListFullElephant.json'));
@@ -47,8 +54,8 @@ let oneYearAgo = new Date().setMonth(now.getMonth()-6);
 //   console.log(error);
 // });
 
-let a = path.join(__dirname,'data/freetextSearchListFullElephant.json')
-let b = path.join(__dirname,'data/freetextSearchListFullGeolocatedElephant.json')
-
-let c = flickr.toGeojson(a, b);
-flickr.fileWrite(c, 'data/geojson-of-elephants.json')
+// let a = path.join(__dirname,'data/freetextSearchListFulltigers.json')
+// let b = path.join(__dirname,'data/freetextSearchListFullGeolocatedTigers.json')
+//
+// let c = flickr.toGeojson(a, b);
+// flickr.fileWrite(c, 'data/geojson-of-tigers.json')
