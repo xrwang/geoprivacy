@@ -40,7 +40,7 @@ const properGeojson = require('../test/fixtures/formattedGeojsonFromTwoArrays');
 //   });
 // });
 //
-//
+
 // test('flickr gets geolocation given a photoID', function (t) {
 //   const result = flickr.getGeoLocationOnly('30058652768').then((result) => {
 //     let expected = '{"photo":{"id":"30058652768","location":{"latitude":"-28.107842","longitude":"32.066675","accuracy":"16","context":"0","locality":{"_content":"Mtubatuba","place_id":"oEUKAidQV7IEdNis","woeid":"1585540"},"county":{"_content":"Umkhanyakude","place_id":"zlkjiCxUVLtq_f6NQQ","woeid":"56189428"},"region":{"_content":"Kwazulu Natal","place_id":"Kua21qNTUb7lREza","woeid":"2346982"},"country":{"_content":"South Africa","place_id":"_0F0zO5TUb6ddnb9qQ","woeid":"23424942"},"place_id":"oEUKAidQV7IEdNis","woeid":"1585540"}},"stat":"ok"}'
@@ -49,9 +49,9 @@ const properGeojson = require('../test/fixtures/formattedGeojsonFromTwoArrays');
 //     t.end();
 //   });
 // });
-//
+
 // test('gets geolocation for an array of photos, returns an array', function (t) {
-//   const result = flickr.getGeolocationForArray(photoArrayFlickrSearch[0]).then ((result) => {
+//   const result = flickr.getGeolocationForArray(photoArrayFlickrSearch).then ((result) => {
 //     let expected = photoArrayFlickrSearchGeo;
 //     t.deepEqual(result, expected)
 //     t.ok(result);
@@ -72,7 +72,6 @@ test('geojsonify JSON data', function (t) {
     let b = path.join(__dirname,'fixtures/photoArrayFlickrSearchGeolocated.json')
     const result = flickr.toGeojson(a,b);
     const expected = properGeojson;
-    console.log(result)
     t.deepEqual(result, expected);
     t.ok(result);
     t.end();

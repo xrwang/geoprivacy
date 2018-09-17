@@ -26,25 +26,36 @@ const flickr = require('./flickr');
 
 //1. gather up the total photos for past year with the word rhino
 
-// let now = new Date();
-// let oneYearAgo = new Date().setFullYear(now.getFullYear()-1);
-//
-// flickrSearch('rhino', 1, 1, oneYearAgo, 500).then((result) => {
-//   return flickrPager(result);
+let now = new Date();
+let oneYearAgo = new Date().setMonth(now.getMonth()-6);
+
+// flickr.flickrSearch('elephant', 1, 1, oneYearAgo, 500).then((result) => {
+//   return flickr.flickrPager(result, 'elephant', oneYearAgo);
 // }).then((result) => {
-//   fileWrite(result, 'data/freetextSearchListFull.json')
+//   flickr.fileWrite(result, 'data/freetextSearchListFullElephant2.json')
+// })
+// .catch(function(error) {
+//   console.log(error);
+// });
+// flickr.flickrSearch('elephant', 1, 1, oneYearAgo, 500).then((result) => {
+//   return flickr.flickrPager(result, 'tiger', oneYearAgo);
+// }).then((result) => {
+//   flickr.fileWrite(result, 'data/freetextSearchListFullElephant.json')
 // })
 // .catch('broken');
-
+//
 
 //2. read in, get the ID of the photo, build geolocation file
-// let photoArrayFromSearchResults = fileRead(path.join(__dirname,'data/freetextSearchList.json'));
-// getGeolocationForArray(photoArrayFromSearchResults[0]).then((result) => {
-//   fileWrite(result, 'data/freetextSearchListFullGeolocated.json')
+// let photoArrayFromSearchResults = flickr.fileRead(path.join(__dirname,'data/freetextSearchListFullElephant.json'));
+// flickr.getGeolocationForArray(photoArrayFromSearchResults).then((result) => {
+//   flickr.fileWrite(result, 'data/freetextSearchListFullGeolocatedElephant.json')
 // })
-// .catch('broken');
-let a = path.join(__dirname,'data/freetextSearchListFull.json')
-let b = path.join(__dirname,'data/freetextSearchListFullGeolocated.json')
+// .catch(function(error) {
+//   console.log(error);
+// });
 
-let c = flickr.toGeojson(a, b);
-flickr.fileWrite(c, 'data/geojson-of-rhinos.json')
+// let a = path.join(__dirname,'data/freetextSearchListFulltigers.json')
+// let b = path.join(__dirname,'data/freetextSearchListFullGeolocatedTigers.json')
+//
+// let c = flickr.toGeojson(a, b);
+// flickr.fileWrite(c, 'data/geojson-of-tigers.json')

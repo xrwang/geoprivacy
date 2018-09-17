@@ -1,0 +1,42 @@
+TAP version 13
+# gets geolocation for an array of photos, returns an array
+1
+{ id: '42468218850',
+  owner: '58656859@N08',
+  secret: 'c8f2ee31d6',
+  server: '1864',
+  farm: 2,
+  title: 'Feeding Rhino',
+  ispublic: 1,
+  isfriend: 0,
+  isfamily: 0 }
+200
+{"photo":{"id":"42468218850","location":{"latitude":"47.548936","longitude":"7.583012","accuracy":"15","context":"0","neighbourhood":{"_content":"Aeschenpl","place_id":"J3jVn4VWWruEisc","woeid":"781540"},"locality":{"_content":"Basel","place_id":"b1CWwAlWWrsOdFU","woeid":"781739"},"county":{"_content":"Canton of Basel","place_id":"cm.HD_9QUL_prxhLaQ","woeid":"12593109"},"region":{"_content":"Canton of Basel-City","place_id":"OYKHQ79TUb7uuYE5","woeid":"2347086"},"country":{"_content":"Switzerland","place_id":"HfSZnNxTUb7.Mo5Vpg","woeid":"23424957"},"place_id":"J3jVn4VWWruEisc","woeid":"781540"}},"stat":"ok"}
+ok 1 should be truthy
+# geojsonify JSON data
+{ type: 'FeatureCollection',
+  features: 
+   [ { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] },
+     { type: 'Feature', geometry: [Object], properties: [Object] } ] }
+ok 2 should be equivalent
+ok 3 should be truthy
+
+1..3
+# tests 3
+# pass  3
+
+# ok
+

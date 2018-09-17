@@ -26,7 +26,7 @@ let flickrSearch = (stringToSearch, page, hasGeo, maxDate, perpage) => {
   return new Promise ((resolve, reject) => {
     request('https://api.flickr.com/services/rest/?method='+'flickr.photos.search'+'&text='+ stringToSearch + '&page=' + page + '&max_taken_date=' + + maxDate + '&has_geo='+hasGeo+ '&per_page='+perpage+'&format=json&nojsoncallback=1&api+key='+FLICKR_TOKEN, function (error, response, body) {
       if (error) reject (error);
-      if (response.statusCode != 200) {
+      if (response && response.statusCode && response.statusCode != 200) {
         reject('Invalid status code <' + response.statusCode + '>');
       }
       resolve(body);
@@ -34,7 +34,7 @@ let flickrSearch = (stringToSearch, page, hasGeo, maxDate, perpage) => {
   });
 }
 
-let flickrPager = (firstPageData) => {
+let flickrPager = (firstPageData, stringToSearch, oneYearAgo) => {
   let pageData = JSON.parse(firstPageData);
   let totalPages = pageData.photos.pages;
   let total = pageData.photos.total;
@@ -46,13 +46,15 @@ let flickrPager = (firstPageData) => {
   let promiseArray = [];
 
   arrayToIterate.forEach((e) => {
-    let promise = flickrSearch('rhino', e, 1, oneYearAgo).then((result) => {
+    let promise = flickrSearch(stringToSearch, e, 1, oneYearAgo).then((result) => {
       let response = JSON.parse(result);
       let photoArray = response.photos.photo;
       console.log('batch' + e)
       return photoArray;
     })
-    .catch('broken');
+    .catch(function(error) {
+      console.log(error);
+    });
     promiseArray.push(promise);
   })
   return Promise.all(promiseArray);
@@ -160,7 +162,8 @@ let getGeoLocationOnly = (photoID) => {
   return new Promise ((resolve, reject) => {
         request('https://api.flickr.com/services/rest/?method='+'flickr.photos.geo.getLocation&photo_id=' + photoID + '&format=json&nojsoncallback=1'+'&api+key='+FLICKR_TOKEN, function (error, response, body) {
         if (error) reject(error);
-        if (response.statusCode != 200) {
+        // console.log(response.statusCode)
+        if (response && response.statusCode && response.statusCode != 200) {
           reject('Invalid status code <' + response.statusCode + '>');
         }
         resolve(body);
@@ -170,12 +173,18 @@ let getGeoLocationOnly = (photoID) => {
 
 let getGeolocationForArray = (photoArray) => {
   let promiseArray = [];
+  console.log(photoArray.length)
   photoArray.forEach((e) => {
-    let promise = getGeoLocationOnly(e.id).then((result) => {
-      return JSON.parse(result);
-    })
-    .catch('broken');
-    promiseArray.push(promise)
+    if (e && e[0] && e[0].id) {
+      let promise = getGeoLocationOnly(e[0].id).then((result) => {
+        console.log(result)
+        return JSON.parse(result);
+      })
+      .catch(function(error) {
+        console.log(error)
+      });
+      promiseArray.push(promise)
+    }
   });
   return Promise.all(promiseArray);
 }
@@ -207,11 +216,34 @@ let toGeojson = (searchResultsArray, searchResultsGeolocatedArray) => {
   let arrayWithTitle = fileRead(searchResultsArray);
   let arrayWithGeo = fileRead(searchResultsGeolocatedArray);
   let formattedGeoData = [];
+  let arrayWithTitleFormatted = [];
+  let arrayWithGeoFormatted = [];
+
+  arrayWithTitle.forEach((e) => {
+    if (e && e[0] && e[0].id) {
+      //error handling above
+      arrayWithTitleFormatted.push(e[0])
+    }
+  });
+
   arrayWithGeo.forEach((e) => {
+    if (e) {
+      //error handling above
+      console.log(e)
+      arrayWithGeoFormatted.push(e)
+    }
+  })
+
+  arrayWithGeoFormatted.forEach((e) => {
     let idToSearch = e.photo.id;
-    let titleInfo = arrayWithTitle[0].find(photo => photo.id === idToSearch)
+    let titleInfo = arrayWithTitleFormatted.find(photo => photo.id === idToSearch)
+    console.log(titleInfo)
+
     let flickrURL = 'https://flickr.com/photos/'+titleInfo.owner.toString()+'/'+titleInfo.id.toString()
-    let country = e.photo.location.country._content;
+    let country =  function () {
+      if (e.photo.location.country._content) {
+      return e.photo.location.country._content;
+    } else return 'na' } ;
     let lat = e.photo.location.latitude;
     let lng = e.photo.location.longitude;
     let title = titleInfo.title;
@@ -245,6 +277,7 @@ module.exports = {
   filterArrayForExifOnly,
   getTagsForEachGeoPhoto,
   flickrSearch,
+  flickrPager,
   getGeoLocationOnly,
   getGeolocationForArray,
   toGeojson
