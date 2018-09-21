@@ -11,7 +11,7 @@ var map = new mapboxgl.Map({
 
 
 map.on('style.load', function () {
-    map.addSource("markers", {
+    map.addSource("rhinos", {
       type: 'geojson',
       data: 'https://cdn.rawgit.com/xrwang/geoprivacy/master/data/rhinos.json?token=AD1W2cn2J22G3JH0dKLD0CVkZhK84zx_ks5bjgKrwA%3D%3D',
       cluster: true,
@@ -70,9 +70,9 @@ map.on('style.load', function () {
 
 
     map.addLayer({
-        id: "clusters",
+        id: "clusters-rhinos",
         type: "circle",
-        source: "markers",
+        source: "rhinos",
         filter: ["has", "point_count"],
         paint: {
             // Use step expressions (https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
@@ -104,9 +104,9 @@ map.on('style.load', function () {
 
 
     map.addLayer({
-        id: "unclustered-point",
+        id: "unclustered-rhinos",
         type: "circle",
-        source: "markers",
+        source: "rhinos",
         filter: ["!", ["has", "point_count"]],
         paint: {
             "circle-color": "#11b4da",
@@ -117,9 +117,9 @@ map.on('style.load', function () {
     });
 
     map.addLayer({
-        id: "markers",
+        id: "rhinos",
         type: "circle",
-        source: "markers",
+        source: "rhinos",
         paint: {
             "circle-color": "#cd0000",
             "circle-radius": 4,
@@ -130,9 +130,9 @@ map.on('style.load', function () {
 
 
     map.addLayer({
-        id: "cluster-count",
+        id: "cluster-count-rhinos",
         type: "symbol",
-        source: "markers",
+        source: "rhinos",
         filter: ["has", "point_count"],
         layout: {
             "text-field": "{point_count_abbreviated}",
@@ -144,7 +144,7 @@ map.on('style.load', function () {
     map.on('click', 'clusters', function (e) {
       var features = map.queryRenderedFeatures(e.point, { layers: ['clusters'] });
       var clusterId = features[0].properties.cluster_id;
-      map.getSource('markers').getClusterExpansionZoom(clusterId, function (err, zoom) {
+      map.getSource('rhinos').getClusterExpansionZoom(clusterId, function (err, zoom) {
           if (err)
               return;
 
@@ -162,7 +162,7 @@ map.on('style.load', function () {
         map.getCanvas().style.cursor = '';
     });
 
-    map.on('click', 'markers', function(e) {
+    map.on('click', 'rhinos', function(e) {
       new mapboxgl.Popup()
         .setLngLat(e.features[0].geometry.coordinates)
         .setHTML('<b>Title</b> ' + e.features[0].properties.name  +'<br><br>'+'<b>URL</b>'+ '<a href='+e.features[0].properties.url+' target="blank">'+e.features[0].properties.url+'</a>')
@@ -348,7 +348,7 @@ map.on('style.load', function () {
 
 
 
-var toggleableLayerIds = [ 'clusters', 'markers','clusters-tigers'];
+var toggleableLayerIds = [ 'clusters-rhinos', 'clusters-tigers', 'clusters-elephants'];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
